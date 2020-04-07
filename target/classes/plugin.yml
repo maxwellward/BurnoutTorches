@@ -1,0 +1,10 @@
+name: BurnoutTorches
+version: 1.0
+main: io.github.bananafalls.burnouttorches.BurnoutTorches
+api-version: 1.13
+authors: [BananaFalls]
+description: Makes torches burn out and dissapear after a set amount of time
+commands:
+  burnouttorches:
+    description: Reload the BurnoutTorches plugin.
+    aliases: bt
