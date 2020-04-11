@@ -22,7 +22,7 @@ public class TorchPlace implements Listener {
 
     @EventHandler
     public void onTorchPlace(BlockPlaceEvent e){
-        if(e.getBlockPlaced().getType() == TORCH){
+        if(e.getBlockPlaced().getType() == TORCH || e.getBlockPlaced().getType() == WALL_TORCH){
             torchLocations.add(e.getBlockPlaced().getLocation());
             StartBurnoutTimer(e.getBlockPlaced().getLocation());
         }
@@ -30,7 +30,7 @@ public class TorchPlace implements Listener {
 
     @EventHandler
     public void onTorchBreak(BlockBreakEvent e){
-        if(e.getBlock().getType() == TORCH){
+        if(e.getBlock().getType() == TORCH || e.getBlock().getType() == WALL_TORCH){
             torchLocations.remove(e.getBlock().getLocation());
         }
     }
