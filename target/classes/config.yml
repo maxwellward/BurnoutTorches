@@ -1,7 +1,0 @@
-# Time until burnout is in seconds. Drop material list: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
-time: 60
-drop: 'STICK'
-
-reload_message: '&a&lRELOADED! &aBurnoutTorches config reloaded!'
-bad_arguments_message: '&c&lBAD ARGS! &cIncorrect arguments! Usage: /bt reload'
-no_permission_message: '&c&lNO PERMISSION! &cYou do not have permission to perform this command!'
