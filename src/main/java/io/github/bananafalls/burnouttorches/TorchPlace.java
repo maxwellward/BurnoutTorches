@@ -1,4 +1,4 @@
-package io.github.bananafalls.burnouttorches.listeners;
+package io.github.bananafalls.burnouttorches;
 
 import io.github.bananafalls.burnouttorches.BurnoutTorches;
 import org.bukkit.Bukkit;

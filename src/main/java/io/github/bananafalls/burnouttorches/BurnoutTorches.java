@@ -1,13 +1,13 @@
 package io.github.bananafalls.burnouttorches;
 
 import io.github.bananafalls.burnouttorches.commands.Reload;
-import io.github.bananafalls.burnouttorches.listeners.TorchPlace;
-import org.bukkit.Bukkit;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.Callable;
+import java.io.File;
+import java.io.IOException;
 
 public final class BurnoutTorches extends JavaPlugin {
 
@@ -16,12 +16,35 @@ public final class BurnoutTorches extends JavaPlugin {
         // Plugin startup logic
         this.getCommand("burnouttorches").setExecutor(new Reload());
         getServer().getPluginManager().registerEvents(new TorchPlace(), this);
-        this.getConfig().options().copyDefaults(true);
-        this.saveConfig();
+
+        initConfigs();
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+    }
+
+    private FileConfiguration torchesConfig;
+    private void initConfigs() {
+        this.getConfig().options().copyDefaults(true);
+        this.saveConfig();
+
+        File torchesFile = new File(getDataFolder(), "custom.yml");
+        if (!torchesFile.exists()) {
+            torchesFile.getParentFile().mkdirs();
+            saveResource("custom.yml", false);
+        }
+
+        torchesConfig = new YamlConfiguration();
+        try {
+            torchesConfig.load(torchesFile);
+        } catch (IOException | InvalidConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public FileConfiguration getTorches() {
+        return this.torchesConfig;
     }
 }
