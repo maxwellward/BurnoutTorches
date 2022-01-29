@@ -1,5 +1,8 @@
-package io.github.bananafalls.burnouttorches;
+package io.github.bananafalls.burnouttorches.events;
 
+import io.github.bananafalls.burnouttorches.BurnoutTorches;
+import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

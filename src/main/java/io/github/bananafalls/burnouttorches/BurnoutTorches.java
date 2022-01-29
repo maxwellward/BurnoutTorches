@@ -1,8 +1,10 @@
 package io.github.bananafalls.burnouttorches;
 
 import io.github.bananafalls.burnouttorches.commands.Reload;
+import io.github.bananafalls.burnouttorches.events.RefuelTorch;
 import io.github.bananafalls.burnouttorches.util.DeserializeTorch;
 import io.github.bananafalls.burnouttorches.util.SerializeTorch;
+import io.github.bananafalls.burnouttorches.events.TorchManager;
 import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -32,6 +34,7 @@ public final class BurnoutTorches extends JavaPlugin {
         TorchManager torchManager = new TorchManager();
         this.getCommand("burnouttorches").setExecutor(new Reload());
         getServer().getPluginManager().registerEvents(torchManager, this);
+        getServer().getPluginManager().registerEvents(new RefuelTorch(), this);
 
         this.torchManager = torchManager;
         this.deserializeTorch = new DeserializeTorch();
