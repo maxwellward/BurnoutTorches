@@ -4,28 +4,23 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
 import java.util.logging.Level;
 
-public class DeserializeLocation {
+public class DeserializeTorch {
 
-	public Location deserializeLoc(final String input) {
+	public HashMap<Location, Long> deserializeTorch(final String input) {
 		try {
-			final String[] string = input.split(",");
-			final double x;
-			final double y;
-			final double z;
-			float yaw = 0;
-			float pitch = 0;
-			x = Double.parseDouble(string[0]);
-			y = Double.parseDouble(string[1]);
-			z = Double.parseDouble(string[2]);
+			final String[] string = input.split(", ");
+			final double x = Double.parseDouble(string[0]);
+			final double y = Double.parseDouble(string[1]);
+			final double z = Double.parseDouble(string[2]);
+			final long remaining = Long.parseLong(string[3]);
 
-			if (string.length == 5) {
-				yaw = Float.parseFloat(string[3]);
-				pitch = Float.parseFloat(string[4]);
-			}
+			HashMap<Location, Long> torch = new HashMap<Location, Long>();
+			torch.put(new Location(Bukkit.getWorlds().get(0), x, y, z), remaining);
 
-			return new Location(Bukkit.getWorlds().get(0), x, y, z, yaw, pitch);
+			return torch;
 		} catch (final NullPointerException e) {
 			return null;
 		} catch (final NumberFormatException e) {
