@@ -1,6 +1,9 @@
 package io.github.bananafalls.burnouttorches;
 
 import io.github.bananafalls.burnouttorches.commands.Reload;
+import io.github.bananafalls.burnouttorches.util.DeserializeLocation;
+import io.github.bananafalls.burnouttorches.util.SerializeLocation;
+import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,13 +14,31 @@ import java.io.IOException;
 
 public final class BurnoutTorches extends JavaPlugin {
 
+    private static BurnoutTorches instance;
+    public static BurnoutTorches getInstance() { return instance; }
+
+    @Getter
+    private DeserializeLocation deserializeLocation;
+    @Getter
+    private SerializeLocation serializeLocation;
+    @Getter
+    private TorchManager torchManager;
+
     @Override
     public void onEnable() {
         // Plugin startup logic
-        this.getCommand("burnouttorches").setExecutor(new Reload());
-        getServer().getPluginManager().registerEvents(new TorchPlace(), this);
-
+        instance = this;
         initConfigs();
+        TorchManager torchManager = new TorchManager();
+        this.getCommand("burnouttorches").setExecutor(new Reload());
+        getServer().getPluginManager().registerEvents(torchManager, this);
+
+        this.torchManager = torchManager;
+        this.deserializeLocation = new DeserializeLocation();
+        this.serializeLocation = new SerializeLocation();
+
+        InitTorches initTorches = new InitTorches(this);
+
     }
 
     @Override
@@ -30,10 +51,10 @@ public final class BurnoutTorches extends JavaPlugin {
         this.getConfig().options().copyDefaults(true);
         this.saveConfig();
 
-        File torchesFile = new File(getDataFolder(), "custom.yml");
+        File torchesFile = new File(getDataFolder(), "torches.yml");
         if (!torchesFile.exists()) {
             torchesFile.getParentFile().mkdirs();
-            saveResource("custom.yml", false);
+            saveResource("torches.yml", false);
         }
 
         torchesConfig = new YamlConfiguration();
@@ -44,7 +65,7 @@ public final class BurnoutTorches extends JavaPlugin {
         }
     }
 
-    public FileConfiguration getTorches() {
+    public FileConfiguration getTorchesConfig() {
         return this.torchesConfig;
     }
 }
