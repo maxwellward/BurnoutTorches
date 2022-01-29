@@ -1,11 +1,12 @@
 time: 60
-drop: 'STICK'
+drop: STICK
 sound-on-fuel: true
 particle-on-fuel: true
-creative-mode-bypass: true
+burnout-in-creative: true
 refuel-items:
-  - 'COAL'
-  - 'CHARCOAL'
+  - COAL
+  - CHARCOAL
 reload_message: '&a&lRELOADED! &aBurnoutTorches config reloaded!'
 bad_arguments_message: '&c&lBAD ARGS! &cIncorrect arguments! Usage: /bt reload'
-no_permission_message: '&c&lNO PERMISSION! &cYou do not have permission to perform this command!'
+no_permission_message: '&c&lNO PERMISSION! &cYou do not have permission to perform
+  this command!'

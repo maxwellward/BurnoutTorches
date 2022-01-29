@@ -1,10 +1,7 @@
 package io.github.bananafalls.burnouttorches.events;
 
 import io.github.bananafalls.burnouttorches.BurnoutTorches;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.EventHandler;
@@ -15,7 +12,6 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RefuelTorch implements Listener {
@@ -31,15 +27,19 @@ public class RefuelTorch implements Listener {
         if(e.getHand() == EquipmentSlot.OFF_HAND) { return; }
         if(e.getAction() != Action.RIGHT_CLICK_BLOCK) { return; }
         if(e.getClickedBlock() == null) { return; }
-        PlayerInventory inventory = e.getPlayer().getInventory();
+        // If the torch was placed in creative mode, it won't have an entry, so don't allow it to be refuelled
+        if(!plugin.getTorchManager().torchLocations.containsKey(e.getClickedBlock().getLocation())) { return; }
 
+        PlayerInventory inventory = e.getPlayer().getInventory();
         List<String> refuelItems = plugin.getConfig().getStringList("refuel-items");
 
         if(refuelItems.contains(inventory.getItemInMainHand().getType().toString())) {
+            if(!plugin.getConfig().getBoolean("burnout-in-creative", true) && e.getPlayer().getGameMode() == GameMode.CREATIVE) { return; }
             Material type = inventory.getItemInMainHand().getType();
             int count = inventory.getItemInMainHand().getAmount();
             inventory.setItemInMainHand(new ItemStack(type, count - 1));
         } else if(refuelItems.contains(inventory.getItemInOffHand().getType().toString())) {
+            if(!plugin.getConfig().getBoolean("burnout-in-creative", true) && e.getPlayer().getGameMode() == GameMode.CREATIVE) { return; }
             Material type = inventory.getItemInOffHand().getType();
             int count = inventory.getItemInOffHand().getAmount();
             inventory.setItemInOffHand(new ItemStack(type, count - 1));
@@ -60,7 +60,7 @@ public class RefuelTorch implements Listener {
             block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.toCenterLocation(), 5, 0.1, 0.1, 0.1);
         }
         if(config.getBoolean("sound-on-fuel", true)) {
-            block.getWorld().playSound(loc, Sound.ITEM_FIRECHARGE_USE, 5, 1);
+            block.getWorld().playSound(loc, Sound.ITEM_FIRECHARGE_USE, 1, 1);
         }
     }
 }

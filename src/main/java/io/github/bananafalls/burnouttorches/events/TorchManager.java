@@ -1,8 +1,7 @@
 package io.github.bananafalls.burnouttorches.events;
 
 import io.github.bananafalls.burnouttorches.BurnoutTorches;
-import lombok.Getter;
-import lombok.Setter;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -37,6 +36,7 @@ public class TorchManager implements Listener {
     @EventHandler
     private void onTorchPlace(BlockPlaceEvent e){
         if(isTorch(e.getBlock().getLocation())) {
+            if(e.getPlayer().getGameMode() == GameMode.CREATIVE && !plugin.getConfig().getBoolean("burnout-in-creative", true)) { return; }
             StartBurnoutTimer(e.getBlockPlaced().getLocation(), plugin.getConfig().getLong("time"));
         }
     }
