@@ -1,5 +1,6 @@
 time: 60
 drop: STICK
+allow-refueling: true
 sound-on-fuel: true
 particle-on-fuel: true
 burnout-in-creative: false

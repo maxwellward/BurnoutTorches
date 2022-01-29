@@ -27,6 +27,7 @@ public class RefuelTorch implements Listener {
         if(e.getHand() == EquipmentSlot.OFF_HAND) { return; }
         if(e.getAction() != Action.RIGHT_CLICK_BLOCK) { return; }
         if(e.getClickedBlock() == null) { return; }
+        if(!plugin.getConfig().getBoolean("allow-refueling", true)) { return; }
         // If the torch was placed in creative mode, it won't have an entry, so don't allow it to be refuelled
         if(!plugin.getTorchManager().torchLocations.containsKey(e.getClickedBlock().getLocation())) { return; }
 
