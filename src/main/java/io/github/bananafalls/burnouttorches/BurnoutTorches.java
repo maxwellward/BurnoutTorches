@@ -1,8 +1,10 @@
 package io.github.bananafalls.burnouttorches;
 
 import io.github.bananafalls.burnouttorches.commands.Reload;
-import io.github.bananafalls.burnouttorches.util.DeserializeLocation;
-import io.github.bananafalls.burnouttorches.util.SerializeLocation;
+import io.github.bananafalls.burnouttorches.events.RefuelTorch;
+import io.github.bananafalls.burnouttorches.util.DeserializeTorch;
+import io.github.bananafalls.burnouttorches.util.SerializeTorch;
+import io.github.bananafalls.burnouttorches.events.TorchManager;
 import lombok.Getter;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -18,9 +20,9 @@ public final class BurnoutTorches extends JavaPlugin {
     public static BurnoutTorches getInstance() { return instance; }
 
     @Getter
-    private DeserializeLocation deserializeLocation;
+    private DeserializeTorch deserializeTorch;
     @Getter
-    private SerializeLocation serializeLocation;
+    private SerializeTorch serializeTorch;
     @Getter
     private TorchManager torchManager;
 
@@ -32,10 +34,11 @@ public final class BurnoutTorches extends JavaPlugin {
         TorchManager torchManager = new TorchManager();
         this.getCommand("burnouttorches").setExecutor(new Reload());
         getServer().getPluginManager().registerEvents(torchManager, this);
+        getServer().getPluginManager().registerEvents(new RefuelTorch(), this);
 
         this.torchManager = torchManager;
-        this.deserializeLocation = new DeserializeLocation();
-        this.serializeLocation = new SerializeLocation();
+        this.deserializeTorch = new DeserializeTorch();
+        this.serializeTorch = new SerializeTorch();
 
         InitTorches initTorches = new InitTorches(this);
 
