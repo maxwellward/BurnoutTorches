@@ -23,7 +23,6 @@ public class InitTorches {
             for(Map.Entry<Location, Long> entry : torch.entrySet()) {
                 long remaining = (entry.getValue() / 1000);
                 instance.getTorchManager().StartBurnoutTimer(entry.getKey(), remaining);
-                System.out.println("Continued old torch with " + remaining + " seconds remaining (" + remaining * 20 + "t)");
             }
         }
     }

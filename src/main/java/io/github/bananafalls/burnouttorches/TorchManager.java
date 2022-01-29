@@ -35,7 +35,6 @@ public class TorchManager implements Listener {
     private void onTorchPlace(BlockPlaceEvent e){
         if(isTorch(e.getBlock().getLocation())) {
             StartBurnoutTimer(e.getBlockPlaced().getLocation(), plugin.getConfig().getLong("time"));
-            System.out.println("Started new torch with " + plugin.getConfig().getLong("time") + " seconds remaining");
         }
     }
 
