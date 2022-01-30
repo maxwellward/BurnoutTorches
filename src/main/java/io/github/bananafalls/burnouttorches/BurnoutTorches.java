@@ -3,6 +3,7 @@ package io.github.bananafalls.burnouttorches;
 import io.github.bananafalls.burnouttorches.commands.Reload;
 import io.github.bananafalls.burnouttorches.events.RefuelTorch;
 import io.github.bananafalls.burnouttorches.util.DeserializeTorch;
+import io.github.bananafalls.burnouttorches.util.SaveManagement;
 import io.github.bananafalls.burnouttorches.util.SerializeTorch;
 import io.github.bananafalls.burnouttorches.events.TorchManager;
 import lombok.Getter;
@@ -19,10 +20,11 @@ public final class BurnoutTorches extends JavaPlugin {
     private static BurnoutTorches instance;
     public static BurnoutTorches getInstance() { return instance; }
 
-    @Getter
-    private DeserializeTorch deserializeTorch;
-    @Getter
-    private SerializeTorch serializeTorch;
+
+    @Getter private DeserializeTorch deserializeTorch;
+    @Getter private SerializeTorch serializeTorch;
+    @Getter private SaveManagement saveManagement;
+
     @Getter
     private TorchManager torchManager;
 
@@ -37,6 +39,7 @@ public final class BurnoutTorches extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RefuelTorch(), this);
 
         this.torchManager = torchManager;
+        this.saveManagement = new SaveManagement();
         this.deserializeTorch = new DeserializeTorch();
         this.serializeTorch = new SerializeTorch();
 

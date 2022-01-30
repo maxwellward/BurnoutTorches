@@ -25,9 +25,9 @@ import static org.bukkit.Material.*;
 
 public class TorchManager implements Listener {
 
-    HashMap<Location, BukkitTask> torchLocations = new HashMap<>();
-    HashMap<Location, Long> torchTimings = new HashMap<>(); // Torch location, time left until burn (in milliseconds)
-    BurnoutTorches plugin;
+    public HashMap<Location, BukkitTask> torchLocations = new HashMap<>();
+    public HashMap<Location, Long> torchTimings = new HashMap<>(); // Torch location, time left until burn (in milliseconds)
+    final BurnoutTorches plugin;
 
     public TorchManager() {
         this.plugin = BurnoutTorches.getInstance();
@@ -70,16 +70,7 @@ public class TorchManager implements Listener {
 
     @EventHandler
     private void onShutdown(PluginDisableEvent e) throws IOException {
-        ArrayList<String> serializedLocations = new ArrayList<>();
-        FileConfiguration torchConfig = plugin.getTorchesConfig();
-        for (Map.Entry<Location, BukkitTask> entry : torchLocations.entrySet()) {
-            long passed = System.currentTimeMillis() - torchTimings.get(entry.getKey());
-            long remaining = (plugin.getConfig().getInt("time") * 1000L) - passed;
-            serializedLocations.add(plugin.getSerializeTorch().serializeTorch(entry.getKey(), remaining));
-        }
-        torchConfig.set("torches", serializedLocations);
-        File torchesFile = new File(plugin.getDataFolder(), "torches.yml");
-        torchConfig.save(torchesFile);
+        plugin.getSaveManagement().saveTorches();
     }
 
     private boolean isTorch(Location loc) {
