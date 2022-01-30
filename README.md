@@ -1,5 +1,5 @@
 # BurnoutTorches
-A Spigot/Paper plugin that causes torches to break and drop an item after a set time.
+A [Spigot/Paper plugin](https://www.spigotmc.org/resources/burnout-torches.77125/) that causes torches to break and drop an item after a set time.
 
 Features:
 - All options are customizable
