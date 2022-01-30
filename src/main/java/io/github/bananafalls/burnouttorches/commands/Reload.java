@@ -1,6 +1,7 @@
 package io.github.bananafalls.burnouttorches.commands;
 
 import io.github.bananafalls.burnouttorches.BurnoutTorches;
+import io.github.bananafalls.burnouttorches.util.SaveManagement;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,11 +17,15 @@ import static org.bukkit.ChatColor.translateAlternateColorCodes;
 
 public class Reload implements CommandExecutor, TabCompleter {
 
-    Plugin plugin = BurnoutTorches.getPlugin(BurnoutTorches.class);
+    final BurnoutTorches plugin;
+
+    public Reload() {
+        this.plugin = BurnoutTorches.getInstance();
+    }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
+        SaveManagement saveManagement = plugin.getSaveManagement();
         if(sender instanceof Player){
             Player p = (Player) sender;
             if(p.hasPermission("burnouttorches.reload")) {
@@ -28,6 +33,7 @@ public class Reload implements CommandExecutor, TabCompleter {
                     p.sendMessage(translateAlternateColorCodes('&', plugin.getConfig().getString("bad_arguments_message")));
                 } else if (args[0].equalsIgnoreCase("reload")) {
                     plugin.reloadConfig();
+                    saveManagement.runAutosave();
                     p.sendMessage(translateAlternateColorCodes('&', plugin.getConfig().getString("reload_message")));
                 } else {
                     p.sendMessage(translateAlternateColorCodes('&', plugin.getConfig().getString("bad_arguments_message")));
@@ -40,6 +46,7 @@ public class Reload implements CommandExecutor, TabCompleter {
                 Bukkit.getConsoleSender().sendMessage(translateAlternateColorCodes('&', plugin.getConfig().getString("bad_arguments_message")));
             } else if (args[0].equalsIgnoreCase("reload")) {
                 plugin.reloadConfig();
+                saveManagement.runAutosave();
                 Bukkit.getConsoleSender().sendMessage(translateAlternateColorCodes('&', plugin.getConfig().getString("reload_message")));
             } else {
                 Bukkit.getConsoleSender().sendMessage(translateAlternateColorCodes('&', plugin.getConfig().getString("bad_arguments_message")));

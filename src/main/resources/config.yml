@@ -4,6 +4,8 @@ allow-refueling: true
 sound-on-fuel: true
 particle-on-fuel: true
 burnout-in-creative: false
+autosave: true
+autosave-frequency: 600
 refuel-items:
   - COAL
   - CHARCOAL
