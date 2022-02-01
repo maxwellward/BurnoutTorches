@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 
@@ -52,11 +53,31 @@ public class RefuelTorch implements Listener {
         TorchManager torchManager = plugin.getTorchManager();
         Location loc = block.getLocation();
         FileConfiguration config = plugin.getConfig();
-        long time = config.getLong("time");
+        int configTime = config.getInt("time");
+        Bukkit.getScheduler().cancelTask(torchManager.torchLocations.get(loc));
 
-        torchManager.torchLocations.get(loc).cancel();
-        torchManager.StartBurnoutTimer(loc, time);
-        torchManager.torchTimings.replace(loc, System.currentTimeMillis());
+        // If "RESET" do the normal stuff
+        // If "ADD", get the current remaining time, add the new time, cancel old task, run it again with the new time
+
+        if(config.getString("refuel-type", "RESET").equals("RESET")) {
+            torchManager.startBurnoutTimer(loc, (long) configTime);
+            //torchManager.torchEndings.replace(loc, System.currentTimeMillis() + (configTime * 1000L));
+            //torchManager.torchTimings.replace(loc, System.currentTimeMillis());
+        } else if(config.getString("refuel-type", "RESET").equals("ADD")) {
+            System.out.println("Torch refuelled ------");
+            long endMillis = torchManager.torchEndings.get(loc);
+            System.out.println(torchManager.torchEndings);
+            System.out.println(endMillis + " < end millis");
+            long remaining = endMillis - System.currentTimeMillis();
+            System.out.println(remaining + " < remaining");
+            long newTime = (configTime * 1000L) + remaining;
+            System.out.println(newTime + " < new time before divide");
+            System.out.println(newTime/1000 + " < new time");
+            torchManager.startBurnoutTimer(loc, newTime); // https://imgur.com/a/tsUt2db Hi Max in the future! This is the issue here. For some reason the new time is being multiplied by a thousand each time the torch is refuelled.
+            // It starts at the proper number again for each individual torch, so if one torch is being multiplied by 10,000, a new torch will be fine on it's first refuel.
+        }
+
+        // Refuel cosmetics
         if(config.getBoolean("particle-on-fuel", true)) {
             block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.toCenterLocation(), 5, 0.1, 0.1, 0.1);
         }

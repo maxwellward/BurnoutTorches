@@ -27,9 +27,9 @@ public class SaveManagement {
     public void saveTorches() {
         ArrayList<String> serializedLocations = new ArrayList<>();
         FileConfiguration torchConfig = plugin.getTorchesConfig();
-        for (Map.Entry<Location, BukkitTask> entry : torchManager.torchLocations.entrySet()) {
-            long passed = System.currentTimeMillis() - torchManager.torchTimings.get(entry.getKey());
-            long remaining = (plugin.getConfig().getInt("time") * 1000L) - passed;
+        for (Map.Entry<Location, Integer> entry : torchManager.torchLocations.entrySet()) {
+            //long passed = System.currentTimeMillis() - torchManager.torchTimings.get(entry.getKey());
+            long remaining = torchManager.torchEndings.get(entry.getKey()) - System.currentTimeMillis();
             serializedLocations.add(plugin.getSerializeTorch().serializeTorch(entry.getKey(), remaining));
         }
         try {
