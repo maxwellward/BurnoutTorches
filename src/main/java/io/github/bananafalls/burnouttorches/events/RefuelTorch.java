@@ -14,6 +14,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
+import java.util.Map;
 
 public class RefuelTorch implements Listener {
 
@@ -53,28 +54,19 @@ public class RefuelTorch implements Listener {
         TorchManager torchManager = plugin.getTorchManager();
         Location loc = block.getLocation();
         FileConfiguration config = plugin.getConfig();
-        int configTime = config.getInt("time");
         Bukkit.getScheduler().cancelTask(torchManager.torchLocations.get(loc));
-
-        // If "RESET" do the normal stuff
-        // If "ADD", get the current remaining time, add the new time, cancel old task, run it again with the new time
+        int configTime = config.getInt("time");
 
         if(config.getString("refuel-type", "RESET").equals("RESET")) {
-            torchManager.startBurnoutTimer(loc, (long) configTime);
-            //torchManager.torchEndings.replace(loc, System.currentTimeMillis() + (configTime * 1000L));
-            //torchManager.torchTimings.replace(loc, System.currentTimeMillis());
+            torchManager.startBurnoutTimer(loc, (long) configTime * 1000);
         } else if(config.getString("refuel-type", "RESET").equals("ADD")) {
-            System.out.println("Torch refuelled ------");
             long endMillis = torchManager.torchEndings.get(loc);
-            System.out.println(torchManager.torchEndings);
-            System.out.println(endMillis + " < end millis");
             long remaining = endMillis - System.currentTimeMillis();
-            System.out.println(remaining + " < remaining");
-            long newTime = (configTime * 1000L) + remaining;
-            System.out.println(newTime + " < new time before divide");
-            System.out.println(newTime/1000 + " < new time");
-            torchManager.startBurnoutTimer(loc, newTime); // https://imgur.com/a/tsUt2db Hi Max in the future! This is the issue here. For some reason the new time is being multiplied by a thousand each time the torch is refuelled.
-            // It starts at the proper number again for each individual torch, so if one torch is being multiplied by 10,000, a new torch will be fine on it's first refuel.
+            long newEnd = System.currentTimeMillis() + remaining + (configTime * 1000L);
+            torchManager.torchEndings.replace(loc, newEnd);
+            long newRemaining = newEnd - System.currentTimeMillis();
+            System.out.println(newRemaining);
+            torchManager.startBurnoutTimer(loc, newRemaining);
         }
 
         // Refuel cosmetics

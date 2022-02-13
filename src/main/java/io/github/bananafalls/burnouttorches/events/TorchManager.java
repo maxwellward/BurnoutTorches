@@ -35,7 +35,7 @@ public class TorchManager implements Listener {
     private void onTorchPlace(BlockPlaceEvent e){
         if(isTorch(e.getBlock().getLocation())) {
             if(e.getPlayer().getGameMode() == GameMode.CREATIVE && !plugin.getConfig().getBoolean("burnout-in-creative", true)) { return; }
-            startBurnoutTimer(e.getBlockPlaced().getLocation(), plugin.getConfig().getLong("time"));
+            startBurnoutTimer(e.getBlockPlaced().getLocation(), plugin.getConfig().getLong("time") * 1000L);
         }
     }
 
@@ -49,7 +49,7 @@ public class TorchManager implements Listener {
         }
     }
 
-    public void startBurnoutTimer(Location torchLoc, Long time){
+    public void startBurnoutTimer(Location torchLoc, Long time){ // time is in ms
         BukkitTask timer = new BukkitRunnable() {
             @Override
             public void run() {
@@ -60,13 +60,11 @@ public class TorchManager implements Listener {
                     }
                     torchLocations.remove(torchLoc);
                     torchEndings.remove(torchLoc);
-                    //torchTimings.remove(torchLoc);
                 }
             }
-        }.runTaskLater(plugin, time * 20L);
-        torchEndings.put(torchLoc, (time * 1000) + System.currentTimeMillis());
+        }.runTaskLater(plugin, (time/1000) * 20L);
+        torchEndings.put(torchLoc, time + System.currentTimeMillis());
         torchLocations.put(torchLoc, timer.getTaskId());
-        //torchTimings.put(torchLoc, System.currentTimeMillis());
     }
 
     @EventHandler

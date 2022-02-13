@@ -21,8 +21,7 @@ public class InitTorches {
         for(String torchString : torches) {
             HashMap<Location, Long> torch = instance.getDeserializeTorch().deserializeTorch(torchString);
             for(Map.Entry<Location, Long> entry : torch.entrySet()) {
-                long remaining = (entry.getValue() / 1000);
-                instance.getTorchManager().startBurnoutTimer(entry.getKey(), remaining);
+                instance.getTorchManager().startBurnoutTimer(entry.getKey(), entry.getValue());
             }
         }
     }
