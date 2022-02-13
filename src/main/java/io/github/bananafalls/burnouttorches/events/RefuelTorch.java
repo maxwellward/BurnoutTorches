@@ -11,8 +11,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
+import java.util.Map;
 
 public class RefuelTorch implements Listener {
 
@@ -52,11 +54,22 @@ public class RefuelTorch implements Listener {
         TorchManager torchManager = plugin.getTorchManager();
         Location loc = block.getLocation();
         FileConfiguration config = plugin.getConfig();
-        long time = config.getLong("time");
+        Bukkit.getScheduler().cancelTask(torchManager.torchLocations.get(loc));
+        int configTime = config.getInt("time");
 
-        torchManager.torchLocations.get(loc).cancel();
-        torchManager.StartBurnoutTimer(loc, time);
-        torchManager.torchTimings.replace(loc, System.currentTimeMillis());
+        if(config.getString("refuel-type", "RESET").equals("RESET")) {
+            torchManager.startBurnoutTimer(loc, (long) configTime * 1000);
+        } else if(config.getString("refuel-type", "RESET").equals("ADD")) {
+            long endMillis = torchManager.torchEndings.get(loc);
+            long remaining = endMillis - System.currentTimeMillis();
+            long newEnd = System.currentTimeMillis() + remaining + (configTime * 1000L);
+            torchManager.torchEndings.replace(loc, newEnd);
+            long newRemaining = newEnd - System.currentTimeMillis();
+            System.out.println(newRemaining);
+            torchManager.startBurnoutTimer(loc, newRemaining);
+        }
+
+        // Refuel cosmetics
         if(config.getBoolean("particle-on-fuel", true)) {
             block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.toCenterLocation(), 5, 0.1, 0.1, 0.1);
         }
