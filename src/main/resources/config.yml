@@ -4,6 +4,7 @@ allow-refueling: true
 refuel-type: RESET
 sound-on-fuel: true
 particle-on-fuel: true
+hologram-on-fuel: true
 refuel-items:
   - COAL
   - CHARCOAL

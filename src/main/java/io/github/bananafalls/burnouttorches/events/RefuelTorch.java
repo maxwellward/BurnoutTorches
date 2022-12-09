@@ -1,6 +1,7 @@
 package io.github.bananafalls.burnouttorches.events;
 
 import io.github.bananafalls.burnouttorches.BurnoutTorches;
+import io.github.bananafalls.burnouttorches.util.HologramManager;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -11,17 +12,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
-import java.util.Map;
 
 public class RefuelTorch implements Listener {
 
     final BurnoutTorches plugin;
+    final HologramManager hologramManager;
 
     public RefuelTorch() {
         this.plugin = BurnoutTorches.getInstance();
+        this.hologramManager = plugin.getHologramManager();
     }
 
     @EventHandler
@@ -65,8 +66,10 @@ public class RefuelTorch implements Listener {
             long newEnd = System.currentTimeMillis() + remaining + (configTime * 1000L);
             torchManager.torchEndings.replace(loc, newEnd);
             long newRemaining = newEnd - System.currentTimeMillis();
-            System.out.println(newRemaining);
             torchManager.startBurnoutTimer(loc, newRemaining);
+            if(plugin.getConfig().getBoolean("hologram-on-fuel")) {
+                hologramManager.displayHologram(newRemaining, loc);
+            }
         }
 
         // Refuel cosmetics

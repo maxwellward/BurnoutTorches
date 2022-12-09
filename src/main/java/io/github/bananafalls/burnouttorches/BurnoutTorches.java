@@ -2,7 +2,9 @@ package io.github.bananafalls.burnouttorches;
 
 import io.github.bananafalls.burnouttorches.commands.Reload;
 import io.github.bananafalls.burnouttorches.events.RefuelTorch;
+import io.github.bananafalls.burnouttorches.events.ServerClose;
 import io.github.bananafalls.burnouttorches.util.DeserializeTorch;
+import io.github.bananafalls.burnouttorches.util.HologramManager;
 import io.github.bananafalls.burnouttorches.util.SaveManagement;
 import io.github.bananafalls.burnouttorches.util.SerializeTorch;
 import io.github.bananafalls.burnouttorches.events.TorchManager;
@@ -20,13 +22,11 @@ public final class BurnoutTorches extends JavaPlugin {
     private static BurnoutTorches instance;
     public static BurnoutTorches getInstance() { return instance; }
 
-
     @Getter private DeserializeTorch deserializeTorch;
     @Getter private SerializeTorch serializeTorch;
     @Getter private SaveManagement saveManagement;
-
-    @Getter
-    private TorchManager torchManager;
+    @Getter private HologramManager hologramManager;
+    @Getter private TorchManager torchManager;
 
     @Override
     public void onEnable() {
@@ -34,22 +34,17 @@ public final class BurnoutTorches extends JavaPlugin {
         instance = this;
         initConfigs();
         TorchManager torchManager = new TorchManager();
-        this.getCommand("burnouttorches").setExecutor(new Reload());
-        getServer().getPluginManager().registerEvents(torchManager, this);
-        getServer().getPluginManager().registerEvents(new RefuelTorch(), this);
-
         this.torchManager = torchManager;
         this.saveManagement = new SaveManagement();
         this.deserializeTorch = new DeserializeTorch();
         this.serializeTorch = new SerializeTorch();
+        this.hologramManager = new HologramManager();
+        this.getCommand("burnouttorches").setExecutor(new Reload());
+        getServer().getPluginManager().registerEvents(torchManager, this);
+        getServer().getPluginManager().registerEvents(new RefuelTorch(), this);
+        getServer().getPluginManager().registerEvents(new ServerClose(), this);
 
         InitTorches initTorches = new InitTorches(this);
-
-    }
-
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
     }
 
     private FileConfiguration torchesConfig;
