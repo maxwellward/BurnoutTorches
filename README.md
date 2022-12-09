@@ -4,7 +4,8 @@ A [Spigot/Paper plugin](https://www.spigotmc.org/resources/burnout-torches.77125
 Features:
 - All options are customizable
 - Refueling torches with any number of customizable items by right-clicking a torch
-- Toggleable creative mode bypass
+- Optional creative mode bypass
+- Optional hologram displaying new remaining time when refueling 
 - A '/bt reload' command to reload the config without restarting your server
 
 If you have an issue or have found a bug, please [create an issue](https://github.com/maxwellward/BurnoutTorches/issues/new) and include as much information as possible!
