@@ -23,6 +23,7 @@ Configuration:
 | refuel-type | RESET | If, when refuelling, time should be added to the existing remanining time or if it should be reset to the configured time.
 | sound-on-fuel | true | If a fire charge sound should play when refuelling a torch. |
 | particle-on-fuel | true | If green particles should show when refuelling a torch. |
+| hologram-on-fuel | true | If a hologram should show when refuelling displaying how much time is now left on the torch. Only works if `refuel-type` is `ADD`. |
 | refuel-items | COAL, CHARCOAL | What items are able to be used to refuel torches. |
 | burnout-in-creative | false | If torches placed in creative mode should burn out or be refuelable. |
 | autosave | true | If torches should periodically be saved to the disk, instead of only at shutdown |
