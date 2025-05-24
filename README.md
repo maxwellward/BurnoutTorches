@@ -19,7 +19,7 @@ Configuration:
 | Option        | Default           | Information  |
 | ------------- | ------------- | ------------- |
 | time | 60 | The time in seconds for torches to burn out. Decimals are not supported. |
-| drop | STICK | The item to drop when a torch burns out. An item list can be found [here](https://papermc.io/javadocs/paper/1.18/org/bukkit/Material.html). |
+| drop | STICK | The item to drop when a torch burns out. An item list can be found [here](https://papermc.io/javadocs/paper/1.21/org/bukkit/Material.html). |
 | allow-refuelling | true | If players should be able to refuel torches. |
 | refuel-type | RESET | If, when refuelling, time should be added to the existing remaining time or if it should be reset to the configured time. (can be `RESET` or `ADD`)
 | sound-on-fuel | true | If a fire charge sound should play when refuelling a torch. |
