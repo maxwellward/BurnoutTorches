@@ -74,7 +74,7 @@ public class RefuelTorch implements Listener {
 
         // Refuel cosmetics
         if(config.getBoolean("particle-on-fuel", true)) {
-            block.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, loc.toCenterLocation(), 5, 0.1, 0.1, 0.1);
+            block.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, loc.toCenterLocation(), 5, 0.1, 0.1, 0.1);
         }
         if(config.getBoolean("sound-on-fuel", true)) {
             block.getWorld().playSound(loc, Sound.ITEM_FIRECHARGE_USE, 1, 1);
